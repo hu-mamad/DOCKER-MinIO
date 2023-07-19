@@ -17,6 +17,17 @@ x-minio-common: &minio-common
     retries: 3
 
 services:
+  reverse-server:
+    image: reverse:v0.1.0
+    volumes:
+      - MinIOssl:/etc/letsencrypt
+      - MinIOconf:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - minio
+
   minio1:
     <<: *minio-common
     hostname: minio1
@@ -29,3 +40,9 @@ services:
       - type: bind
         source: /etc/default/minio
         target: /etc/config.env
+    expose:
+      - 80
+    networks:
+      - minio
+networks:
+  minio:
