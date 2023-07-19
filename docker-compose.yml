@@ -40,6 +40,7 @@ services:
         target: /etc/config.env
     expose:
       - 80
+      - 443
     networks:
       - minio
 networks:
