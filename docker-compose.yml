@@ -17,8 +17,8 @@ x-minio-common: &minio-common
     retries: 3
 
 services:
-  reverse-server:
-    image: reverse:v0.1.0
+  server:
+    image: minioo:v0.1.0
     volumes:
       - MinIOssl:/etc/letsencrypt
       - MinIOconf:/etc/nginx/conf.d
