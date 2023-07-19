@@ -1,0 +1,46 @@
+version: '3.7'
+
+volumes:
+  MinIOssl:
+  MinIOconf:
+
+x-minio-common: &minio-common
+  image: minio/minio
+  command: server --console-address ":9090" /minio1/mnt/data
+  ports:
+    - "9000:9000"
+    - "9090:9090"
+  healthcheck:
+    test: ["CMD", "curl", "-f", "http://159.65.199.5:9000/minio/health/live"]
+    interval: 30s
+    timeout: 20s
+    retries: 3
+
+services:
+  ssl-server:
+    image: minioo:v0.1.0
+    volumes:
+      - MinIOssl:/etc/letsencrypt
+      - MinIOconf:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - minio
+  minio1:
+    <<: *minio-common
+    hostname: minio1
+    volumes:
+      - type: bind
+        source: /mnt/data/compose
+        target: /mnt/data
+      - type: bind
+        source: /etc/default/minio
+        target: /etc/config.env
+    expose: 
+      - 80
+    networks:
+      - minio
+
+networks:
+  minio:
