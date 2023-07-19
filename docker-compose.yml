@@ -32,8 +32,6 @@ services:
     <<: *minio-common
     hostname: minio1
     volumes:
-      - MinIOssl:/etc/letsencrypt
-      - MinIOconf:/etc/nginx/conf.d
       - type: bind
         source: /mnt/data/compose
         target: /mnt/data
