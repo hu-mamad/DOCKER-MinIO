@@ -7,7 +7,7 @@ RUN apt-get update && apt install -y \
 	nginx \
 	python3-certbot-nginx 
 
-COPY /conf.d/*.conf /etc/nginx/conf.d/
+COPY /conf.d/rev-ser/*.conf /etc/nginx/conf.d/
 COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80/tcp

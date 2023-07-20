@@ -3,6 +3,10 @@ version: '3.7'
 volumes:
   MinIOssl:
   MinIOconf:
+  NginxSSL:
+  NginxConf:
+  Nginxx:
+
 
 x-minio-common: &minio-common
   image: minio/minio
@@ -22,6 +26,7 @@ services:
     volumes:
       - MinIOssl:/etc/letsencrypt
       - MinIOconf:/etc/nginx/conf.d
+      - NginxSSL:/etc/nginx/ssl:ro
     ports:
       - "80:80"
       - "443:443"
@@ -39,8 +44,17 @@ services:
         source: /etc/default/minio
         target: /etc/config.env
     expose:
+      - 9000
+    networks:
+      - minio
+  reverse-server:
+    image: rev-server:v0.1.0 
+    expose:
       - 80
-      - 443
+    volumes:
+      - NginxConf:/etc/nginx/conf.d
+    depends_on:
+      - minio1
     networks:
       - minio
 networks:
