@@ -45,8 +45,10 @@ services:
         target: /etc/config.env
     expose:
       - 9000
+      - 443
     networks:
       - minio
+
   reverse-server:
     image: rev-server:v0.1.0 
     expose:
