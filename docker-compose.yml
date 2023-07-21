@@ -6,6 +6,7 @@ volumes:
   NginxSSL:
   NginxConf:
   Nginxx:
+  MinIOdata:
 
 
 x-minio-common: &minio-common
@@ -43,6 +44,7 @@ services:
       - type: bind
         source: /etc/default/minio
         target: /etc/config.env
+      - MinIOdata:/minio1/mnt/data
     expose:
       - 9000
       - 9090
