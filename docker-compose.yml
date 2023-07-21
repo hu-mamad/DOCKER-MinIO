@@ -15,7 +15,7 @@ x-minio-common: &minio-common
     - "9000:9000"
     - "9090:9090"
   healthcheck:
-    test: ["CMD", "curl", "-f", "http://159.65.199.5:9000/minio/health/live"]
+    test: ["CMD", "curl", "-f", "https://miinio.duckdns.org:9000/minio/health/live"]
     interval: 30s
     timeout: 20s
     retries: 3
@@ -45,7 +45,7 @@ services:
         target: /etc/config.env
     expose:
       - 9000
-      - 443
+      - 9090
     networks:
       - minio
 
