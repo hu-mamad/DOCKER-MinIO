@@ -11,7 +11,7 @@ volumes:
 
 x-minio-common: &minio-common
   image: minio/minio
-  command: server --console-address ":9090" /minio1/mnt/data
+  command: server --console-address ":443" /minio1/mnt/data
   ports:
     - "9000:9000"
     - "9090:9090"
@@ -29,8 +29,8 @@ services:
       - MinIOconf:/etc/nginx/conf.d
       - NginxSSL:/etc/nginx/ssl:ro
     ports:
-      - "80:80"
       - "443:443"
+      - "80:80"
     networks:
       - minio
 
@@ -45,9 +45,7 @@ services:
         source: /etc/default/minio
         target: /etc/config.env
       - MinIOdata:/minio1/mnt/data
-    expose:
-      - 9000
-      - 9090
+      - ./certs:/certs:ro
     networks:
       - minio
 
