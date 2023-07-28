@@ -4,14 +4,12 @@ volumes:
   MinIOssl:
   MinIOconf:
   NginxSSL:
-  NginxConf:
-  Nginxx:
   MinIOdata:
-
+  ssl-renew:
 
 x-minio-common: &minio-common
   image: minio/minio
-  command: server --console-address ":443" /minio1/mnt/data
+  command: server --console-address ":9090" /minio1/mnt/data
   ports:
     - "9000:9000"
     - "9090:9090"
@@ -25,6 +23,7 @@ services:
   server:
     image: minioo:v0.1.0
     volumes:
+      - ssl-renew:/ssl-renew
       - MinIOssl:/etc/letsencrypt
       - MinIOconf:/etc/nginx/conf.d
       - NginxSSL:/etc/nginx/ssl:ro
@@ -37,6 +36,8 @@ services:
   minio1:
     <<: *minio-common
     hostname: minio1
+    ports:
+      - ":443"
     volumes:
       - type: bind
         source: /mnt/data/compose
@@ -49,15 +50,5 @@ services:
     networks:
       - minio
 
-  reverse-server:
-    image: rev-server:v0.1.0 
-    expose:
-      - 80
-    volumes:
-      - NginxConf:/etc/nginx/conf.d
-    depends_on:
-      - minio1
-    networks:
-      - minio
 networks:
   minio:
